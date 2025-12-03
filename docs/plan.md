@@ -131,6 +131,13 @@ CatSounds/
 │   │   └── test_api.py
 ```
 
+### Architecture
+Store sound files in CloudFlare R2. Distribute via CloudFlare CDN.
+
+Other data in CloudFlare KV or D1.
+
+REST API with CloudFlare workers
+
 ## Legal specs
 Intent is to allow others to use this code freely.
  -> MIT license?
