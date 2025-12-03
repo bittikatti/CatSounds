@@ -96,9 +96,40 @@ Content-Type: "application/json"
 }
 ```
 
-
 **List all in group**
 + cat_bot_domain/sounds/groups
+
+### File structure
+
+```text
+CatSounds/
+├── .gitignore
+├── README.md
+├── package.json
+├── src/
+│   ├── server.js
+│   ├── controllers/
+│   │   └── controller.js
+│   │       GET for all routes
+│   │       links to responses
+│   ├── routes/
+│   │   └── routes.js
+│   │       sounds
+│   │       sounds/<id>
+│   │       sounds/random
+│   │       sounds/groups
+│   │       sounds/groups/<group_list_name>
+│   │       sounds/groups/<group_list_name>/random
+│   │       sounds/groups/<group_list_name>/<id>
+│   ├── utils/
+│   │   └── <logging?>
+│   └── database/
+│       └── <basically simple table to combine each sound transcription to its sound url>
+├── test/
+│   ├── README.md
+│   ├── python/tests
+│   │   └── test_api.py
+```
 
 ## Legal specs
 Intent is to allow others to use this code freely.
