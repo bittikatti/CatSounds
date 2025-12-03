@@ -54,9 +54,10 @@ Random or specific id.
 + cat_bot_domain/sounds/1 or cat_bot_domain/sounds/random
 
 ```yaml
+Content-Type: "application/json"
 {
     "transcript": "Cat meowing",
-    "soundFile": "Sound file",
+    "soundFile": <Link to the sound file>,
     "license": "In case it really is necessary to include in the free sounds",
     "group": "happy",
     "links" : { # HATEOAS
@@ -73,6 +74,7 @@ Random or specific id.
 + cat_bot_domain/sounds
 
 ```yaml
+Content-Type: "application/json"
 {
     "list": [],
     "links" : { # HATEOAS
@@ -84,6 +86,7 @@ Random or specific id.
 ```
 + cat_bot_domain/sounds/groups/\<group_list_name\>
 ```yaml
+Content-Type: "application/json"
 {
     "list": [],
     "links" : { # HATEOAS
