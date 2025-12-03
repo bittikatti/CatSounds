@@ -1,13 +1,13 @@
 # Overview
 
 # Draft
-[] CatBot REST API
+[] CatSounds REST API
 
 [] Cat responses as audio and text
 
-[] Example HTML site to display CatBot in action
+[] Example HTML site to display CatSounds in action
 
-## CatBot REST API
+## CatSounds REST API
 + Possible operations: GET
 + Keep it simple.
     + No queries
