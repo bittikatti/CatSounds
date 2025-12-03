@@ -128,7 +128,9 @@ CatSounds/
 ├── test/
 │   ├── README.md
 │   ├── python/tests
-│   │   └── test_api.py
+│   │   ├── unit_tests.py
+│   │   ├── local_end_to_end_tests.py
+│   │   └── cloudflare_end_to_end_tests.py
 ```
 
 ### Architecture
