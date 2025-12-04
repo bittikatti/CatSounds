@@ -3,3 +3,9 @@
 !*.md
 
 !docs/
+
+# Test files
+!test/
+!test/**
+!*.py
+*.pyc
