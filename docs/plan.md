@@ -140,6 +140,8 @@ Other data in CloudFlare KV or D1.
 
 REST API with CloudFlare workers
 
+Rate limit
+
 ## Legal specs
 Intent is to allow others to use this code freely.
  -> MIT license?
