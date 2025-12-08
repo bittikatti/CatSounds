@@ -4,6 +4,10 @@
 
 !docs/
 
+# JSONS
+!*.json
+!*.jsonc
+
 # Javascripts of the api
 !src/
 !src/**
