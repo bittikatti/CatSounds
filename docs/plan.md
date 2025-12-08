@@ -126,11 +126,9 @@ CatSounds/
 │   └── database/
 │       └── <basically simple table to combine each sound transcription to its sound url>
 ├── test/
-│   ├── README.md
-│   ├── python/tests
-│   │   ├── unit_tests.py
-│   │   ├── local_end_to_end_tests.py
-│   │   └── cloudflare_end_to_end_tests.py
+│   ├── unit_tests.js
+│   ├── local_end_to_end_tests.js
+│   └── cloudflare_end_to_end_tests.js
 ```
 
 ### Architecture
