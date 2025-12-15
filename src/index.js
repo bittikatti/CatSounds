@@ -9,7 +9,25 @@
  */
 
 export default {
-	async fetch(request, env, ctx) {
-		return new Response('Hello World!');
-	},
+    async fetch(request, env) {
+        const {pathname} = new URL(request.url);
+
+		// Only GET method allowed
+		if ( request.method !== "GET" ) {
+			return new Response(JSON.stringify({ error: "Method not supported. Only GET is supported." }), {status: 405});
+		}
+
+		// From the database
+		if (pathname === "/api/sounds") {
+			const { results } = await env.cat_sounds_data
+				.prepare("SELECT * FROM CatSounds")
+				.run();
+			return Response.json(results);
+		}
+
+        return new Response(
+            `Welcome to the D1 API Playground!
+            \n\n${pathname}`,
+        );
+    },
 };
