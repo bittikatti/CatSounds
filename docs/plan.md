@@ -107,7 +107,7 @@ CatSounds/
 ├── README.md
 ├── package.json
 ├── src/
-│   ├── server.js
+│   ├── index.js
 │   ├── controllers/
 │   │   └── controller.js
 │   │       GET for all routes
