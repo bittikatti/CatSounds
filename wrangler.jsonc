@@ -9,5 +9,12 @@
 	"compatibility_date": "2025-12-13",
 	"observability": {
 		"enabled": true
-	}
+	},
+	"d1_databases": [
+		{
+			"binding": "cat_sounds_data",
+			"database_name": "cat-sounds-data",
+			"database_id": "8c597cd0-7d42-4f7c-a471-3bf437943d25"
+		}
+	]
 }

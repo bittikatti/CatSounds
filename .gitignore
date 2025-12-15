@@ -8,6 +8,10 @@
 !*.json
 !*.jsonc
 
+# Database schema
+!database/
+!database/schema.sql
+
 # Javascripts of the api
 !src/
 !src/**
