@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS CatSounds (
     Transcript     TEXT,
     SoundGroup     TEXT,
     SoundFileLink  TEXT,
-    SoundLicence   TEXT
+    SoundLicence   TEXT,
+    OriginalLink   TEXT
 );
