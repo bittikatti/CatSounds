@@ -14,7 +14,11 @@ export default {
 
 		// Only GET method allowed
 		if ( request.method !== "GET" ) {
-			return new Response(JSON.stringify({ error: "Method not supported. Only GET is supported." }), {status: 405});
+			return new Response(
+				JSON.stringify({ error: "Method not supported. Only GET is supported." }), {
+					status: 405,
+					headers: { "Allow": "GET", "Content-Type": "application/json" }
+				});
 		}
 
 		// From the database

@@ -22,3 +22,19 @@ describe("local worker alive", () => {
         expect(response.status).toBe(200);
     });
 });
+
+describe("local worker denies PUT", () => {
+    it("responds", async () => {
+        const request = new IncomingRequest('http://example.com/api/resource', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: 'value' }),
+        });
+        // Create an empty context to pass to `worker.fetch()`
+        const ctx = createExecutionContext();
+        const response = await worker.fetch(request, env, ctx);
+        // Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
+        await waitOnExecutionContext(ctx);
+        expect(response.status).toBe(405);
+    });
+});
