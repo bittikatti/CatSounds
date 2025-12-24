@@ -23,15 +23,25 @@ export default {
 
 		// From the database
 		if (pathname === "/api/sounds") {
-			const { results } = await env.cat_sounds_data
-				.prepare("SELECT * FROM CatSounds")
-				.run();
-			return Response.json(results);
+			try {
+				const { results } = await env.cat_sounds_data
+					.prepare("SELECT * FROM CatSounds")
+					.run();
+				return Response.json(results);
+			} catch (err) {
+                return new Response(
+                    JSON.stringify({ error: "Internal server error" }),
+                    { status: 500, headers: { "Content-Type": "application/json" } }
+                );
+            }
+			
 		}
 
+		// Default message if any other path
         return new Response(
-            `Welcome to the D1 API Playground!
-            \n\n${pathname}`,
-        );
+			JSON.stringify({ error: "Not found" }), {
+				status: 404,
+				headers: { "Content-Type": "application/json" }
+			});
     },
 };
