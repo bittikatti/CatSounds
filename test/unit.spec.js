@@ -38,3 +38,23 @@ describe("local worker denies PUT", () => {
         expect(response.status).toBe(405);
     });
 });
+
+describe("local worker returns random sound", () => {
+    it("responds", async () => {
+        const request = new IncomingRequest("http://example.com/api/sounds/random");
+        // Create an empty context to pass to `worker.fetch()`
+        const ctx = createExecutionContext();
+        const response = await worker.fetch(request, env, ctx);
+        // Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
+        await waitOnExecutionContext(ctx);
+        expect(response.status).toBe(200);
+        expect(await response.json()).to.contain.keys([
+            "CatSoundID",
+            "Transcript",
+            "SoundGroup", 
+            "SoundFileLink",
+            "SoundLicence",
+            "OriginalLink"
+        ]);
+    });
+});

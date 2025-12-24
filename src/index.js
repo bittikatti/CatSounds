@@ -34,8 +34,32 @@ export default {
                     { status: 500, headers: { "Content-Type": "application/json" } }
                 );
             }
-			
 		}
+
+		// /api/sounds/random
+		if (pathname === "/api/sounds/random") {
+			try {
+				const { results } = await env.cat_sounds_data
+					.prepare("SELECT * FROM CatSounds ORDER BY RANDOM() LIMIT 1")
+					.run();
+				return Response.json(results[0]);
+			} catch (err) {
+                return new Response(
+                    JSON.stringify({ error: "Internal server error" }),
+                    { status: 500, headers: { "Content-Type": "application/json" } }
+                );
+            }
+		}
+
+		// /api/sounds/<id>
+
+		// /api/sounds/groups
+
+		// /api/sounds/groups/<group (e.g. happy)>
+
+		// /api/sounds/groups/<group (e.g. happy)>/random
+
+		// /api/sounds/groups/<group (e.g. happy)>/<id?>
 
 		// Default message if any other path
         return new Response(
