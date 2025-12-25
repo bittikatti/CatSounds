@@ -79,6 +79,29 @@ export default {
 		}
 
 		// /api/sounds/groups
+		if (pathname === "/api/sounds/groups") {
+			// SELECT DISTINCT department FROM employees
+			try {
+				const { results } = await env.cat_sounds_data
+					.prepare("SELECT DISTINCT SoundGroup FROM CatSounds")
+					.run();
+				// HATEOAS links to the results
+				const result = results.map(item => ({
+					SoundGroup: item.SoundGroup,
+						_links: {
+							soundsByGroup: {
+								href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}`
+							}
+						}
+					}));
+				return Response.json(result);
+			} catch (err) {
+                return new Response(
+                    JSON.stringify({ error: "Internal server error" }),
+                    { status: 500, headers: { "Content-Type": "application/json" } }
+                );
+            }
+		}
 
 		// /api/sounds/groups/<group (e.g. happy)>
 
