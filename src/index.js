@@ -52,6 +52,31 @@ export default {
 		}
 
 		// /api/sounds/<id>
+		if (pathname.match(/^\/api\/sounds\/([0-9]+)$/)) {
+			var id = pathname.split("/").pop();
+			try {
+				// Find the id from the db
+				const { results } = await env.cat_sounds_data
+					.prepare(`SELECT * FROM CatSounds WHERE CatSoundID=${id}`)
+					.run();
+				// If found, return the first
+				if (results.length == 1 ) {
+					return Response.json(results[0]);
+				} else {
+					// If id not found, return 404
+					return new Response(
+						JSON.stringify({ error: "Not found" }), {
+							status: 404,
+							headers: { "Content-Type": "application/json" }
+						});
+				}
+			} catch (err) {
+                return new Response(
+                    JSON.stringify({ error: "Internal server error" }),
+                    { status: 500, headers: { "Content-Type": "application/json" } }
+                );
+            }
+		}
 
 		// /api/sounds/groups
 
