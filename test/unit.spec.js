@@ -106,3 +106,27 @@ describe("local worker finds groups", () => {
         expect(group1._links.soundsByGroup.href).toMatch(/^\/?api\/sounds\/groups\/.+/);
     });
 });
+
+describe("local worker finds happy from groups", () => {
+    it("responds", async () => {
+        const request = new IncomingRequest("http://example.com/api/sounds/groups/happy");
+        // Create an empty context to pass to `worker.fetch()`
+        const ctx = createExecutionContext();
+        const response = await worker.fetch(request, env, ctx);
+        // Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
+        await waitOnExecutionContext(ctx);
+        expect(response.status).toBe(200);
+    });
+});
+
+describe("local worker does not find monster from groups", () => {
+    it("responds", async () => {
+        const request = new IncomingRequest("http://example.com/api/sounds/groups/monster");
+        // Create an empty context to pass to `worker.fetch()`
+        const ctx = createExecutionContext();
+        const response = await worker.fetch(request, env, ctx);
+        // Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
+        await waitOnExecutionContext(ctx);
+        expect(response.status).toBe(404);
+    });
+});
