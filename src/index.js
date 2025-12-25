@@ -132,8 +132,6 @@ export default {
 
 		// /api/sounds/groups/<group (e.g. happy)>/random
 
-		// /api/sounds/groups/<group (e.g. happy)>/<id?>
-
 		// Default message if any other path
         return new Response(
 			JSON.stringify({ error: "Not found" }), {

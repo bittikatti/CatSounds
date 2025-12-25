@@ -120,7 +120,7 @@ CatSounds/
 │   │       sounds/groups
 │   │       sounds/groups/<group_list_name>
 │   │       sounds/groups/<group_list_name>/random
-│   │       sounds/groups/<group_list_name>/<id>
+│   │       
 │   ├── utils/
 │   │   └── <logging?>
 │   └── database/
