@@ -26,7 +26,16 @@ export default {
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT * FROM CatSounds")
 					.run();
-				return Response.json(results);
+				
+				// HATEOAS links to the results
+				const result = results.map(item => ({
+					item,
+					_links: [{
+						rel: "self",
+						href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
+					}]
+					}));
+				return Response.json(result);
 			}
 
 			if (pathname === "/api/sounds/random") {
@@ -63,11 +72,10 @@ export default {
 				// HATEOAS links to the results
 				const result = results.map(item => ({
 					SoundGroup: item.SoundGroup,
-						_links: {
-							soundsByGroup: {
-								href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}`
-							}
-						}
+						_links: [{
+							rel: "soundsByGroup",
+							href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}`
+						}]
 					}));
 				return Response.json(result);
 			}

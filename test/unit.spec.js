@@ -99,11 +99,11 @@ describe("local worker finds groups", () => {
         const group1 = body[0];
         // check keys
         expect(group1).toHaveProperty("_links");
-        expect(group1._links).toHaveProperty("soundsByGroup");
-        expect(group1._links.soundsByGroup).toHaveProperty("href");
+        expect(group1._links[0]).to.have.property("rel", "soundsByGroup");
+        expect(group1._links[0]).toHaveProperty("href");
 
         // check href format
-        expect(group1._links.soundsByGroup.href).toMatch(/^\/?api\/sounds\/groups\/.+/);
+        expect(group1._links[0].href).toMatch(/^\/?api\/sounds\/groups\/.+/);
     });
 });
 
