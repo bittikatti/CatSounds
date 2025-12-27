@@ -29,7 +29,7 @@ export default {
 				
 				// HATEOAS links to the results
 				const result = results.map(item => ({
-					item,
+					...item,
 					_links: [{
 						rel: "self",
 						href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
