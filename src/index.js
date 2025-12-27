@@ -30,10 +30,20 @@ export default {
 				// HATEOAS links to the results
 				const result = results.map(item => ({
 					...item,
-					_links: [{
-						rel: "self",
-						href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
-					}]
+					_links: [
+						{
+							rel: "self",
+							href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
+						},
+						{
+							rel: "randomFromAll",
+							href: `/api/sounds/random`
+						},
+						{
+							rel: "randomFromGroup",
+							href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
+						}
+					]
 				}));
 				return Response.json(result);
 			}
@@ -48,12 +58,16 @@ export default {
 					...item,
 					_links: [
 						{
-							rel: "self",
+							rel: "selfRandom",
 							href: pathname
 						},
 						{
-							rel: "exactSelf",
+							rel: "selfExact",
 							href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
+						},
+						{
+							rel: "randomFromGroup",
+							href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
 						}
 					]
 				}))[0];
@@ -72,10 +86,20 @@ export default {
 					// HATEOAS links
 					const result = results.map(item => ({
 						...item,
-						_links: [{
-							rel: "self",
-							href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
-						}]
+						_links: [
+							{
+								rel: "self",
+								href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
+							},
+							{
+								rel: "randomFromAll",
+								href: `/api/sounds/random`
+							},
+							{
+								rel: "randomFromGroup",
+								href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
+							}
+						]
 					}))[0];
 					return Response.json(result);
 				} else {
@@ -95,10 +119,16 @@ export default {
 				// HATEOAS links to the results
 				const result = results.map(item => ({
 					SoundGroup: item.SoundGroup,
-						_links: [{
-							rel: "soundsByGroup",
-							href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}`
-						}]
+						_links: [
+							{
+								rel: "soundsByGroup",
+								href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}`
+							},
+							{
+								rel: "randomFromGroup",
+								href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
+							}
+						]
 					}));
 				return Response.json(result);
 			}
@@ -115,10 +145,16 @@ export default {
 					// HATEOAS links to the results
 					const result = results.map(item => ({
 						...item,
-						_links: [{
-							rel: "self",
-							href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
-						}]
+						_links: [
+							{
+								rel: "self",
+								href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
+							},
+							{
+								rel: "randomFromGroup",
+								href: `${pathname}/random`
+							}
+						]
 					}));
 					return Response.json(result);
 				} else {
