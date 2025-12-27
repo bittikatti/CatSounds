@@ -131,6 +131,31 @@ export default {
 		}
 
 		// /api/sounds/groups/<group (e.g. happy)>/random
+		if (pathname.match(/^\/api\/sounds\/groups\/([a-zA-Z]+)\/random$/)) {
+			var group = pathname.split("/")[4];
+			try {
+				// Find the group from the db
+				const { results } = await env.cat_sounds_data
+					.prepare(`SELECT * FROM CatSounds WHERE SoundGroup="${group}" ORDER BY RANDOM() LIMIT 1`)
+					.run();
+				// If found, return all
+				if (results.length > 0 ) {
+					return Response.json(results[0]);
+				} else {
+					// If group not found, return 404
+					return new Response(
+						JSON.stringify({ error: "Not found" }), {
+							status: 404,
+							headers: { "Content-Type": "application/json" }
+						});
+				}
+			} catch (err) {
+                return new Response(
+                    JSON.stringify({ error: "Internal server error" }),
+                    { status: 500, headers: { "Content-Type": "application/json" } }
+                );
+            }
+		}
 
 		// Default message if any other path
         return new Response(
