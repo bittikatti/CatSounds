@@ -20,41 +20,26 @@ export default {
 					headers: { "Allow": "GET", "Content-Type": "application/json" }
 				});
 		}
-
-		// From the database
-		if (pathname === "/api/sounds") {
-			try {
+		try {
+			// From the database
+			if (pathname === "/api/sounds") {
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT * FROM CatSounds")
 					.run();
 				return Response.json(results);
-			} catch (err) {
-                return new Response(
-                    JSON.stringify({ error: "Internal server error" }),
-                    { status: 500, headers: { "Content-Type": "application/json" } }
-                );
-            }
-		}
+			}
 
-		// /api/sounds/random
-		if (pathname === "/api/sounds/random") {
-			try {
+			// /api/sounds/random
+			if (pathname === "/api/sounds/random") {
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT * FROM CatSounds ORDER BY RANDOM() LIMIT 1")
 					.run();
 				return Response.json(results[0]);
-			} catch (err) {
-                return new Response(
-                    JSON.stringify({ error: "Internal server error" }),
-                    { status: 500, headers: { "Content-Type": "application/json" } }
-                );
-            }
-		}
+			}
 
-		// /api/sounds/<id>
-		if (pathname.match(/^\/api\/sounds\/([0-9]+)$/)) {
-			var id = pathname.split("/").pop();
-			try {
+			// /api/sounds/<id>
+			if (pathname.match(/^\/api\/sounds\/([0-9]+)$/)) {
+				var id = pathname.split("/").pop();
 				// Find the id from the db
 				const { results } = await env.cat_sounds_data
 					.prepare(`SELECT * FROM CatSounds WHERE CatSoundID=${id}`)
@@ -70,18 +55,11 @@ export default {
 							headers: { "Content-Type": "application/json" }
 						});
 				}
-			} catch (err) {
-                return new Response(
-                    JSON.stringify({ error: "Internal server error" }),
-                    { status: 500, headers: { "Content-Type": "application/json" } }
-                );
-            }
-		}
+			}
 
-		// /api/sounds/groups
-		if (pathname === "/api/sounds/groups") {
-			// SELECT DISTINCT department FROM employees
-			try {
+			// /api/sounds/groups
+			if (pathname === "/api/sounds/groups") {
+				// SELECT DISTINCT department FROM employees
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT DISTINCT SoundGroup FROM CatSounds")
 					.run();
@@ -95,18 +73,11 @@ export default {
 						}
 					}));
 				return Response.json(result);
-			} catch (err) {
-                return new Response(
-                    JSON.stringify({ error: "Internal server error" }),
-                    { status: 500, headers: { "Content-Type": "application/json" } }
-                );
-            }
-		}
+			}
 
-		// /api/sounds/groups/<group (e.g. happy)>
-		if (pathname.match(/^\/api\/sounds\/groups\/([a-zA-Z]+)$/)) {
-			var group = pathname.split("/").pop();
-			try {
+			// /api/sounds/groups/<group (e.g. happy)>
+			if (pathname.match(/^\/api\/sounds\/groups\/([a-zA-Z]+)$/)) {
+				var group = pathname.split("/").pop();
 				// Find the group from the db
 				const { results } = await env.cat_sounds_data
 					.prepare(`SELECT * FROM CatSounds WHERE SoundGroup="${group}"`)
@@ -122,18 +93,11 @@ export default {
 							headers: { "Content-Type": "application/json" }
 						});
 				}
-			} catch (err) {
-                return new Response(
-                    JSON.stringify({ error: "Internal server error" }),
-                    { status: 500, headers: { "Content-Type": "application/json" } }
-                );
-            }
-		}
+			}
 
-		// /api/sounds/groups/<group (e.g. happy)>/random
-		if (pathname.match(/^\/api\/sounds\/groups\/([a-zA-Z]+)\/random$/)) {
-			var group = pathname.split("/")[4];
-			try {
+			// /api/sounds/groups/<group (e.g. happy)>/random
+			if (pathname.match(/^\/api\/sounds\/groups\/([a-zA-Z]+)\/random$/)) {
+				var group = pathname.split("/")[4];
 				// Find the group from the db
 				const { results } = await env.cat_sounds_data
 					.prepare(`SELECT * FROM CatSounds WHERE SoundGroup="${group}" ORDER BY RANDOM() LIMIT 1`)
@@ -149,13 +113,14 @@ export default {
 							headers: { "Content-Type": "application/json" }
 						});
 				}
-			} catch (err) {
-                return new Response(
-                    JSON.stringify({ error: "Internal server error" }),
-                    { status: 500, headers: { "Content-Type": "application/json" } }
-                );
-            }
+			}
+		} catch (err) {
+			return new Response(
+				JSON.stringify({ error: "Internal error" }),
+				{ status: 500, headers: { "Content-Type": "application/json" } }
+			);
 		}
+		
 
 		// Default message if any other path
         return new Response(
