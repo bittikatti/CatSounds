@@ -34,7 +34,7 @@ export default {
 						rel: "self",
 						href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
 					}]
-					}));
+				}));
 				return Response.json(result);
 			}
 
@@ -97,7 +97,15 @@ export default {
 					.run();
 				// If found, return all
 				if (results.length > 0 ) {
-					return Response.json(results);
+					// HATEOAS links to the results
+					const result = results.map(item => ({
+						...item,
+						_links: [{
+							rel: "self",
+							href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
+						}]
+					}));
+					return Response.json(result);
 				} else {
 					// If group not found, return 404
 					return new Response(
