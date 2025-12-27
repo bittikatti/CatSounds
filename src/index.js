@@ -29,7 +29,6 @@ export default {
 				return Response.json(results);
 			}
 
-			// /api/sounds/random
 			if (pathname === "/api/sounds/random") {
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT * FROM CatSounds ORDER BY RANDOM() LIMIT 1")
@@ -57,9 +56,7 @@ export default {
 				}
 			}
 
-			// /api/sounds/groups
 			if (pathname === "/api/sounds/groups") {
-				// SELECT DISTINCT department FROM employees
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT DISTINCT SoundGroup FROM CatSounds")
 					.run();
