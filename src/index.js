@@ -54,7 +54,15 @@ export default {
 					.run();
 				// If found, return the first
 				if (results.length == 1 ) {
-					return Response.json(results[0]);
+					// HATEOAS links
+					const result = results.map(item => ({
+						...item,
+						_links: [{
+							rel: "self",
+							href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
+						}]
+					}))[0];
+					return Response.json(result);
 				} else {
 					// If id not found, return 404
 					return new Response(
