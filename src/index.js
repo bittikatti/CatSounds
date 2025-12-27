@@ -42,7 +42,22 @@ export default {
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT * FROM CatSounds ORDER BY RANDOM() LIMIT 1")
 					.run();
-				return Response.json(results[0]);
+				
+				// HATEOAS links to the results
+				const result = results.map(item => ({
+					...item,
+					_links: [
+						{
+							rel: "self",
+							href: pathname
+						},
+						{
+							rel: "exactSelf",
+							href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
+						}
+					]
+				}))[0];
+				return Response.json(result);
 			}
 
 			// /api/sounds/<id>
@@ -125,7 +140,21 @@ export default {
 					.run();
 				// If found, return all
 				if (results.length > 0 ) {
-					return Response.json(results[0]);
+					// HATEOAS links to the results
+					const result = results.map(item => ({
+						...item,
+						_links: [
+							{
+								rel: "self",
+								href: pathname
+							},
+							{
+								rel: "exactSelf",
+								href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
+							}
+						]
+					}))[0];
+					return Response.json(result);
 				} else {
 					// If group not found, return 404
 					return new Response(
