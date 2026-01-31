@@ -23,9 +23,17 @@ npx wrangler d1 execute cat-sounds-data --local --file=./database/seed.sql
 npx wrangler d1 execute cat-sounds-data --local --command="SELECT * FROM CatSounds"
 ```
 
-# Start the local test
+# Start the local tests (in test folder)
 npm test
 
 ```cmd
 npm test
 ```
+
+# Start dev server
+
+```cmd
+npm run dev
+```
+In browser open:
+http://localhost:8787/api/sounds
