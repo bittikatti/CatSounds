@@ -1,6 +1,13 @@
 # Create in CloudFlare
 Infrastructure: CloudFlare
 
+# Worker
+1. Create worker for the D1 (only once)
+```cmd
+npm create cloudflare@latest -- catsounds
+```
+
+
 # D1 database
 ## Create D1 database
 1. Create empty D1 (done only once)
