@@ -6,7 +6,7 @@ Infrastructure: CloudFlare
 ```cmd
 npx wrangler@latest d1 create cat-sounds-data
 ```
-# Test locally
+# Setup test D1 locally
 2. Initiate empty database in D1 locally
 ```cmd
 npx wrangler d1 execute cat-sounds-data --local --file=./database/schema.sql
@@ -23,3 +23,9 @@ npx wrangler d1 execute cat-sounds-data --local --file=./database/seed.sql
 npx wrangler d1 execute cat-sounds-data --local --command="SELECT * FROM CatSounds"
 ```
 
+# Start the local test
+npm test
+
+```cmd
+npm test
+```
