@@ -1,11 +1,14 @@
 # Overview
 
 # Draft
-[] CatSounds REST API
+[X] CatSounds REST API
+[ ] Host API and restrict access to web app only
 
-[] Cat responses as audio and text
+[ ] Cat responses as audio and text
 
-[] Example HTML site to display CatSounds in action
+[ ] Example HTML site to display CatSounds in action
+    * Include permanent disclaimer to credit if Freesound is used: "This app uses sounds from Freesound.org."
+    * TODO: How to gracefully credit each author of each sound? And keep the web app and the credits accessible? Should the full list be in some other page and that list be linked?
 
 ## CatSounds REST API
 + Possible operations: GET
@@ -149,4 +152,4 @@ Use (cat) sounds that are not copyrighted.
 Record own cats.
 Distribute the cat records as open.
 
-Intent to maybe create openly available API?
+Intent to maybe create openly available API? No.
