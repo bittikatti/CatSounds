@@ -31,7 +31,14 @@ npx wrangler d1 execute cat-sounds-data --local --file=./database/seed.sql
 npx wrangler d1 execute cat-sounds-data --local --command="SELECT * FROM CatSounds"
 ```
 
-## Start the local tests (in test folder)
+# R2
+## Create R2 storage
+1. Create empty R2 (done only once)
+```cmd
+npx wrangler r2 bucket create sound-files
+```
+
+# Start the local tests (in test folder)
 npm test
 
 ```cmd
