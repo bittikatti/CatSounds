@@ -25,10 +25,24 @@ npx wrangler d1 execute cat-sounds-data --local --file=./database/schema.sql
 npx wrangler d1 execute cat-sounds-data --local --file=./database/seed.sql
 ```
 
-
 4. Check that the data from seed.sql is in the local D1
 ```cmd
 npx wrangler d1 execute cat-sounds-data --local --command="SELECT * FROM CatSounds"
+```
+
+## Setup D1 remote
+2. Initiate empty database in D1 locally
+```cmd
+npx wrangler d1 execute cat-sounds-data --remote --file=./database/schema.sql
+```
+3. Fill the local D1 database with data from seed.sql (not tracked by git)
+```cmd
+npx wrangler d1 execute cat-sounds-data --remote --file=./database/seed.sql
+```
+
+4. Check that the data from seed.sql is in the local D1
+```cmd
+npx wrangler d1 execute cat-sounds-data --remote --command="SELECT * FROM CatSounds"
 ```
 
 # R2
