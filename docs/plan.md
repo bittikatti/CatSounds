@@ -59,10 +59,10 @@ Random or specific id.
 ```yaml
 Content-Type: "application/json"
 {
-    "transcript": "Cat meowing",
-    "soundFile": <Link to the sound file>,
-    "license": "In case it really is necessary to include in the free sounds",
-    "group": "happy",
+    "Transcript": "Cat meowing",
+    "SoundFileName": <Link to the sound file>,
+    "SoundLicence": "c0",
+    "SoundGroup": "happy",
     "links" : { # HATEOAS
         "self" : "cat_bot_domain/sounds/1",
         "selfInGroup" : "cat_bot_domain/sounds/groups/happy/1"
