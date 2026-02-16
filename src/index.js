@@ -21,6 +21,25 @@ export default {
 				});
 		}
 		try {
+			// 1. CDN route (cached)
+			if (pathname.startsWith("/cdn/")) {
+				// Cache mp3 files to /cdn/<soundFileName path
+				const key = pathname.replace("/cdn/", "");
+
+				const object = await env.sound_files.get(key);
+
+				if (!object) {
+					return new Response("Not found", { status: 404 });
+				}
+
+				return new Response(object.body, {
+					headers: {
+					"Content-Type": object.httpMetadata?.contentType || "audio/mpeg",
+					"Cache-Control": "public, max-age=31536000, immutable"
+					}
+				});
+			}
+
 			// From the database
 			if (pathname === "/api/sounds") {
 				const { results } = await env.cat_sounds_data
@@ -30,6 +49,7 @@ export default {
 				// HATEOAS links to the results
 				const result = results.map(item => ({
 					...item,
+					SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
 					_links: [
 						{
 							rel: "self",
@@ -56,6 +76,7 @@ export default {
 				// HATEOAS links to the results
 				const result = results.map(item => ({
 					...item,
+					SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
 					_links: [
 						{
 							rel: "selfRandom",
@@ -86,6 +107,7 @@ export default {
 					// HATEOAS links
 					const result = results.map(item => ({
 						...item,
+						SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
 						_links: [
 							{
 								rel: "self",
@@ -145,6 +167,7 @@ export default {
 					// HATEOAS links to the results
 					const result = results.map(item => ({
 						...item,
+						SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
 						_links: [
 							{
 								rel: "self",
@@ -179,6 +202,7 @@ export default {
 					// HATEOAS links to the results
 					const result = results.map(item => ({
 						...item,
+						SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
 						_links: [
 							{
 								rel: "self",
