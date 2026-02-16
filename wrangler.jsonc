@@ -20,7 +20,8 @@
 	"r2_buckets": [
 		{
 			"bucket_name": "sound-files",
-			"binding": "sound_files"
+			"binding": "sound_files",
+			"remote": true
 		}
 	]
 }
