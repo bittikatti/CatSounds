@@ -52,7 +52,7 @@ describe("local worker returns random sound", () => {
             "CatSoundID",
             "Transcript",
             "SoundGroup", 
-            "SoundFileLink",
+            "SoundFileName",
             "SoundLicence",
             "OriginalLink"
         ]);
@@ -144,7 +144,7 @@ describe("local worker returns random from happy", () => {
             "CatSoundID",
             "Transcript",
             "SoundGroup", 
-            "SoundFileLink",
+            "SoundFileName",
             "SoundLicence",
             "OriginalLink"
         ]);

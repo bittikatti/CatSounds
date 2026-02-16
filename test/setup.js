@@ -11,7 +11,7 @@ function splitSchemaSQL(sql) {
 function splitSeedSQL(sql) {
     /** Because the seed.sql looks like this, it has more indents than the schema.sql
     
-    INSERT INTO CatSounds (Transcript, SoundGroup, SoundFileLink, SoundLicence, OriginalLink)
+    INSERT INTO CatSounds (Transcript, SoundGroup, SoundFileName, SoundLicence, OriginalLink)
     VALUES
         (
             'Meow',
