@@ -4,12 +4,6 @@ export function HATEOASlinksToOneRandom(item) {
     }
     item.SoundLink = `/cdn/${encodeURIComponent(item.SoundFileName)}`;
     // HATEOAS links
-    const links = [
-        {
-            rel: "self",
-            href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
-        }
-    ];
     item._links = [
         {
             rel: "self",
