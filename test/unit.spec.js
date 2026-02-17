@@ -74,11 +74,9 @@ describe("local worker finds groups", () => {
         const group1 = body[0];
         // check keys
         expect(group1).toHaveProperty("_links");
-        expect(group1._links[0]).to.have.property("rel", "self");
-        expect(group1._links[0]).toHaveProperty("href");
-
-        // check href format
-        expect(group1._links[0].href).toMatch(/^\/?api\/sounds\/groups\/.+/);
+        expect(group1).toHaveProperty("_embedded");
+        expect(group1._embedded).toHaveProperty("groups");
+        expect(group1._embedded.groups[0]).to.have.property("SoundGroup", "_links");
     });
 });
 

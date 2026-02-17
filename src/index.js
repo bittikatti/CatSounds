@@ -69,19 +69,22 @@ export default {
 					.prepare("SELECT DISTINCT SoundGroup FROM CatSounds")
 					.run();
 				// HATEOAS links to the results
-				const result = results.map(item => ({
-					SoundGroup: item.SoundGroup,
-						_links: [
-							{
-								rel: "self",
-								href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}`
-							},
-							{
-								rel: "randomFromGroup",
-								href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
-							}
+				const result = {
+					"_links": {
+						"self": pathname,
+					},
+					"_embedded": {
+						"groups": [
+							results.map(item => ({
+								SoundGroup: item.SoundGroup,
+								_links: {
+									self: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}`,
+									random: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
+								}
+							}))
 						]
-					}));
+					}
+				}
 				return Response.json(result);
 			}
 
