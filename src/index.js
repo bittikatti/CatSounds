@@ -65,6 +65,7 @@ export default {
 					SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
 					_links: {
 						self: pathname,
+						randomFromGroup: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`,
 					}
 				});
 			}
@@ -126,8 +127,15 @@ export default {
 					.run();
 				// If found, return all
 				if (results.length > 0 ) {
-					const result = HATEOASlinksToOneItem(results[0], pathname);
-					return Response.json(result);
+					const item = results[0];
+					return Response.json({
+						...item,
+						SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
+						_links: {
+							self: pathname,
+							randomFromAll: "/api/sounds/random",
+						}
+					});
 				} else {
 					// If group not found, return 404
 					return new Response(
