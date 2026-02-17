@@ -8,7 +8,7 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { HATEOASlinksToOne } from './json_structure.js'
+import { HATEOASlinksToOneExact } from './json_structure.js'
 
 export default {
     async fetch(request, env) {
@@ -50,7 +50,7 @@ export default {
 				
 				// HATEOAS links to the results
 				const result = results.map(item => (
-					HATEOASlinksToOne(item, true)
+					HATEOASlinksToOneExact(item, true)
 				));
 				return Response.json(result);
 			}
@@ -91,7 +91,7 @@ export default {
 					.run();
 				// If found, return the first
 				if (results.length == 1 ) {
-					const result = HATEOASlinksToOne(results[0], true);
+					const result = HATEOASlinksToOneExact(results[0], true);
 					return Response.json(result);
 				} else {
 					// If id not found, return 404
@@ -134,7 +134,7 @@ export default {
 				// If found, return all
 				if (results.length > 0 ) {
 					// HATEOAS links to the results
-					const result = HATEOASlinksToOne(results[0]);
+					const result = HATEOASlinksToOneExact(results[0]);
 					return Response.json(result);
 				} else {
 					// If group not found, return 404

@@ -1,4 +1,4 @@
-export function HATEOASlinksToOne(item, randomFromAll=false) {
+export function HATEOASlinksToOneExact(item, randomFromAll=false) {
     if (typeof item !== "object") {
         throw new Error("Parameter needs to be array");
     }
