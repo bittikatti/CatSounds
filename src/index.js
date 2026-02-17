@@ -8,7 +8,7 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { HATEOASlinksToOneExact, HATEOASlinksToOneRandom } from './json_structure.js'
+import { HATEOASlinksToOneItem } from './json_structure.js'
 
 export default {
     async fetch(request, env) {
@@ -50,7 +50,7 @@ export default {
 				
 				// HATEOAS links to the results
 				const result = results.map(item => (
-					HATEOASlinksToOneExact(item, true)
+					HATEOASlinksToOneItem(item, pathname, true)
 				));
 				return Response.json(result);
 			}
@@ -60,7 +60,7 @@ export default {
 					.prepare("SELECT * FROM CatSounds ORDER BY RANDOM() LIMIT 1")
 					.run();
 				
-				const result = HATEOASlinksToOneRandom(results[0], pathname);
+				const result = HATEOASlinksToOneItem(results[0], pathname);
 				return Response.json(result);
 			}
 
@@ -73,7 +73,7 @@ export default {
 					.run();
 				// If found, return the first
 				if (results.length == 1 ) {
-					const result = HATEOASlinksToOneExact(results[0], true);
+					const result = HATEOASlinksToOneItem(results[0], pathname);
 					return Response.json(result);
 				} else {
 					// If id not found, return 404
@@ -117,7 +117,7 @@ export default {
 				if (results.length > 0 ) {
 					// HATEOAS links to the results
 					const result = results.map(item => (
-						HATEOASlinksToOneExact(item)
+						HATEOASlinksToOneItem(item, pathname, true)
 					));
 					return Response.json(result);
 				} else {
@@ -139,7 +139,7 @@ export default {
 					.run();
 				// If found, return all
 				if (results.length > 0 ) {
-					const result = HATEOASlinksToOneRandom(results[0], pathname);
+					const result = HATEOASlinksToOneItem(results[0], pathname);
 					return Response.json(result);
 				} else {
 					// If group not found, return 404

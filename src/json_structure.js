@@ -1,29 +1,4 @@
-const randomFromAllUrl = `/api/sounds/random`
-
-export function HATEOASlinksToOneExact(item, randomFromAll=false) {
-    if (typeof item !== "object") {
-        throw new Error("Parameter needs to be array");
-    }
-    item.SoundLink = `/cdn/${encodeURIComponent(item.SoundFileName)}`;
-    // HATEOAS links
-    item._links = [
-        {
-            rel: "self",
-            href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
-        },
-        ...(randomFromAll ? [{
-            rel: "randomFromAll",
-            href: randomFromAllUrl
-        }] : []),
-        {
-            rel: "randomFromGroup",
-            href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
-        }
-    ];
-    return item;
-}
-
-export function HATEOASlinksToOneRandom(item, pathname) {
+export function HATEOASlinksToOneItem(item, pathname, partOfAll=false) {
     if (typeof item !== "object") {
         throw new Error("Parameter needs to be array");
     }
@@ -33,12 +8,20 @@ export function HATEOASlinksToOneRandom(item, pathname) {
     // selfRandom is the pathname
     // if selfRandom is same as randomFromAll, do not include randomFromAll
     // Same with randomFromGroup
-    const randomFromGroupUrl = `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
-
+    const randomFromAllUrl = `/api/sounds/random`;
+    const randomFromGroupUrl = `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`;
+    const selfExact = `/api/sounds/${encodeURIComponent(item.CatSoundID)}`;
+    
+    // Presumably self link is same as pathname
+    var selfLink = pathname;
+    // If this is only one item of list of items, self should be selfExact 
+    if (partOfAll) {
+        selfLink = selfExact;
+    }
     item._links = [
         {
-            rel: "selfRandom",
-            href: pathname
+            rel: "self",
+            href: selfLink
         },
         ...(pathname != randomFromAllUrl ? [{
             rel: "randomFromAll",
@@ -48,10 +31,10 @@ export function HATEOASlinksToOneRandom(item, pathname) {
             rel: "randomFromGroup",
             href: randomFromGroupUrl
         }] : []),
-        {
+        ...(selfLink != selfExact ? [{
             rel: "selfExact",
-            href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
-        }
+            href: selfExact
+        }] : []),
     ];
     return item;
 }
