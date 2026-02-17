@@ -54,6 +54,7 @@ export default {
 			}
 
 			if (pathname === "/api/sounds/random") {
+				// Return one random cat sound from the database (with hateoas links)
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT * FROM CatSounds ORDER BY RANDOM() LIMIT 1")
 					.run();
@@ -69,10 +70,10 @@ export default {
 			}
 
 			if (pathname === "/api/sounds/groups") {
+				// Return HATEOAS links to show the available groups
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT DISTINCT SoundGroup FROM CatSounds")
 					.run();
-				// HATEOAS links to the results
 				const result = {
 					_links: {
 						self: pathname,
@@ -119,6 +120,7 @@ export default {
 
 			// /api/sounds/groups/<group (e.g. happy)>/random
 			if (pathname.match(/^\/api\/sounds\/groups\/([a-zA-Z]+)\/random$/)) {
+				// Return one random cat sound from the group
 				var group = pathname.split("/")[4];
 				// Find the group from the db
 				const { results } = await env.cat_sounds_data
