@@ -59,9 +59,14 @@ export default {
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT * FROM CatSounds ORDER BY RANDOM() LIMIT 1")
 					.run();
-				
-				const result = HATEOASlinksToOneItem(results[0], pathname);
-				return Response.json(result);
+				const item = results[0];
+				return Response.json({
+					...item,
+					SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
+					_links: {
+						self: pathname,
+					}
+				});
 			}
 
 			if (pathname === "/api/sounds/groups") {
