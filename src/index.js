@@ -8,7 +8,7 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { HATEOASlinksToOneExact } from './json_structure.js'
+import { HATEOASlinksToOneExact, HATEOASlinksToOneRandom } from './json_structure.js'
 
 export default {
     async fetch(request, env) {
@@ -60,25 +60,7 @@ export default {
 					.prepare("SELECT * FROM CatSounds ORDER BY RANDOM() LIMIT 1")
 					.run();
 				
-				// HATEOAS links to the results
-				const result = results.map(item => ({
-					...item,
-					SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
-					_links: [
-						{
-							rel: "selfRandom",
-							href: pathname
-						},
-						{
-							rel: "selfExact",
-							href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
-						},
-						{
-							rel: "randomFromGroup",
-							href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
-						}
-					]
-				}))[0];
+				const result = HATEOASlinksToOneRandom(results[0], pathname);
 				return Response.json(result);
 			}
 
@@ -155,21 +137,7 @@ export default {
 					.run();
 				// If found, return all
 				if (results.length > 0 ) {
-					// HATEOAS links to the results
-					const result = results.map(item => ({
-						...item,
-						SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
-						_links: [
-							{
-								rel: "self",
-								href: pathname
-							},
-							{
-								rel: "exactSelf",
-								href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
-							}
-						]
-					}))[0];
+					const result = HATEOASlinksToOneRandom(results[0], pathname);
 					return Response.json(result);
 				} else {
 					// If group not found, return 404
