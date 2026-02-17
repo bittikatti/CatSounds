@@ -44,14 +44,14 @@ export default {
 
 			// From the database
 			if (pathname === "/api/sounds") {
-				const { results } = await env.cat_sounds_data
-					.prepare("SELECT * FROM CatSounds")
-					.run();
-				
-				// HATEOAS links to the results
-				const result = results.map(item => (
-					HATEOASlinksToOneItem(item, pathname, true)
-				));
+				// HATEOAS links
+				const result = {
+					_links: {
+						self: pathname,
+						randomItem: "/api/sounds/random",
+						groups: "/api/sounds/groups",
+					}
+				};
 				return Response.json(result);
 			}
 
@@ -70,11 +70,11 @@ export default {
 					.run();
 				// HATEOAS links to the results
 				const result = {
-					"_links": {
-						"self": pathname,
+					_links: {
+						self: pathname,
 					},
-					"_embedded": {
-						"groups": [
+					_embedded: {
+						groups: [
 							results.map(item => ({
 								SoundGroup: item.SoundGroup,
 								_links: {
