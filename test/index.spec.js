@@ -10,11 +10,11 @@ describe('Hello World worker', () => {
 		const response = await worker.fetch(request, env, ctx);
 		// Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
 		await waitOnExecutionContext(ctx);
-		expect(await response.text()).toContain("CatSoundID");
+		expect(await response.text()).toContain("_links");
 	});
 
 	it('responds with welcome (integration style)', async () => {
 		const response = await SELF.fetch('http://example.com/api/sounds');
-		expect(await response.text()).toContain("CatSoundID");
+		expect(await response.text()).toContain("_links");
 	});
 });

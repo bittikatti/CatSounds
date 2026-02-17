@@ -8,8 +8,6 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { HATEOASlinksToOneItem } from './json_structure.js'
-
 export default {
     async fetch(request, env) {
         const {pathname} = new URL(request.url);
@@ -48,7 +46,7 @@ export default {
 				const result = {
 					_links: {
 						self: pathname,
-						randomItem: "/api/sounds/random",
+						randomItemFromAll: "/api/sounds/random",
 						groups: "/api/sounds/groups",
 					}
 				};
@@ -65,7 +63,7 @@ export default {
 					SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
 					_links: {
 						self: pathname,
-						randomFromGroup: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`,
+						randomItemFromGroup: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`,
 					}
 				});
 			}
@@ -80,15 +78,14 @@ export default {
 						self: pathname,
 					},
 					_embedded: {
-						groups: [
+						groups:
 							results.map(item => ({
 								SoundGroup: item.SoundGroup,
 								_links: {
 									self: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}`,
-									random: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
+									randomItemFromGroup: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`
 								}
 							}))
-						]
 					}
 				}
 				return Response.json(result);
@@ -103,11 +100,13 @@ export default {
 					.run();
 				// If found, return all
 				if (results.length > 0 ) {
-					// HATEOAS links to the results
-					const result = results.map(item => (
-						HATEOASlinksToOneItem(item, pathname, true)
-					));
-					return Response.json(result);
+					// HATEOAS links
+					return Response.json({
+						_links: {
+							self: pathname,
+							randomItemFromAll: `${pathname}/random`,
+						}
+					});
 				} else {
 					// If group not found, return 404
 					return new Response(
@@ -147,7 +146,7 @@ export default {
 			}
 		} catch (err) {
 			return new Response(
-				JSON.stringify({ error: "Internal error" }),
+				JSON.stringify({ error: "Internal error:" + err }),
 				{ status: 500, headers: { "Content-Type": "application/json" } }
 			);
 		}

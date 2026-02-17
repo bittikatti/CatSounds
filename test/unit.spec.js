@@ -70,13 +70,12 @@ describe("local worker finds groups", () => {
         expect(response.status).toBe(200);
 
         const body = await response.json();
-        expect(body.length).toBeGreaterThan(0);
-        const group1 = body[0];
+        expect(body).to.have.property("_links");
         // check keys
-        expect(group1).toHaveProperty("_links");
-        expect(group1).toHaveProperty("_embedded");
-        expect(group1._embedded).toHaveProperty("groups");
-        expect(group1._embedded.groups[0]).to.have.property("SoundGroup", "_links");
+        expect(body).to.have.property("_embedded");
+        expect(body._embedded).to.have.property("groups");
+        expect(body._embedded.groups[0]).to.have.property("SoundGroup");
+        expect(body._embedded.groups[0]).to.have.property("_links");
     });
 });
 
