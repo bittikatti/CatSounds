@@ -1,4 +1,4 @@
-export function HATEOASlinksToOneRandom(item) {
+export function HATEOASlinksToOne(item, randomFromAll=false) {
     if (typeof item !== "object") {
         throw new Error("Parameter needs to be array");
     }
@@ -9,10 +9,10 @@ export function HATEOASlinksToOneRandom(item) {
             rel: "self",
             href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
         },
-        {
+        ...(randomFromAll ? [{
             rel: "randomFromAll",
             href: `/api/sounds/random`
-        },
+        }] : []),
         {
             rel: "randomFromGroup",
             href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}/random`

@@ -8,7 +8,7 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { HATEOASlinksToOneRandom } from './json_structure.js'
+import { HATEOASlinksToOne } from './json_structure.js'
 
 export default {
     async fetch(request, env) {
@@ -50,7 +50,7 @@ export default {
 				
 				// HATEOAS links to the results
 				const result = results.map(item => (
-					HATEOASlinksToOneRandom(item)
+					HATEOASlinksToOne(item, true)
 				));
 				return Response.json(result);
 			}
@@ -91,7 +91,7 @@ export default {
 					.run();
 				// If found, return the first
 				if (results.length == 1 ) {
-					const result = HATEOASlinksToOneRandom(results[0]);
+					const result = HATEOASlinksToOne(results[0], true);
 					return Response.json(result);
 				} else {
 					// If id not found, return 404
@@ -134,20 +134,7 @@ export default {
 				// If found, return all
 				if (results.length > 0 ) {
 					// HATEOAS links to the results
-					const result = results.map(item => ({
-						...item,
-						SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
-						_links: [
-							{
-								rel: "self",
-								href: `/api/sounds/${encodeURIComponent(item.CatSoundID)}`
-							},
-							{
-								rel: "randomFromGroup",
-								href: `${pathname}/random`
-							}
-						]
-					}));
+					const result = HATEOASlinksToOne(results[0]);
 					return Response.json(result);
 				} else {
 					// If group not found, return 404
