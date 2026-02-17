@@ -64,27 +64,6 @@ export default {
 				return Response.json(result);
 			}
 
-			// /api/sounds/<id>
-			if (pathname.match(/^\/api\/sounds\/([0-9]+)$/)) {
-				var id = pathname.split("/").pop();
-				// Find the id from the db
-				const { results } = await env.cat_sounds_data
-					.prepare(`SELECT * FROM CatSounds WHERE CatSoundID=${id}`)
-					.run();
-				// If found, return the first
-				if (results.length == 1 ) {
-					const result = HATEOASlinksToOneItem(results[0], pathname);
-					return Response.json(result);
-				} else {
-					// If id not found, return 404
-					return new Response(
-						JSON.stringify({ error: "Not found" }), {
-							status: 404,
-							headers: { "Content-Type": "application/json" }
-						});
-				}
-			}
-
 			if (pathname === "/api/sounds/groups") {
 				const { results } = await env.cat_sounds_data
 					.prepare("SELECT DISTINCT SoundGroup FROM CatSounds")

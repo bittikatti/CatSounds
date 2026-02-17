@@ -59,31 +59,6 @@ describe("local worker returns random sound", () => {
     });
 });
 
-describe("local worker finds id 1", () => {
-    it("responds", async () => {
-        const request = new IncomingRequest("http://example.com/api/sounds/1");
-        // Create an empty context to pass to `worker.fetch()`
-        const ctx = createExecutionContext();
-        const response = await worker.fetch(request, env, ctx);
-        // Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
-        await waitOnExecutionContext(ctx);
-        expect(response.status).toBe(200);
-        expect(await response.json()).to.have.property("CatSoundID", 1);
-    });
-});
-
-describe("local worker cannot find id 1000", () => {
-    it("responds", async () => {
-        const request = new IncomingRequest("http://example.com/api/sounds/1000");
-        // Create an empty context to pass to `worker.fetch()`
-        const ctx = createExecutionContext();
-        const response = await worker.fetch(request, env, ctx);
-        // Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
-        await waitOnExecutionContext(ctx);
-        expect(response.status).toBe(404);
-    });
-});
-
 describe("local worker finds groups", () => {
     it("responds", async () => {
         const request = new IncomingRequest("http://example.com/api/sounds/groups");

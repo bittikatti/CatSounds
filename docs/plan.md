@@ -27,8 +27,6 @@
 
 **Basic**
 + cat_bot_domain/documentation (Is this a good way to give the API's documentation?)
-+ cat_bot_domain/sounds (list of all available cat sounds)
-+ cat_bot_domain/sounds/1 (cat sound of id 1)
 + cat_bot_domain/sounds/random (one random cat sound from all available cat sounds)
 + cat_bot_domain/sounds/groups (list of available groups)
     + no random for this resource level (there will be random from all and random from a group, so why random from group**s**?).
@@ -42,7 +40,6 @@
 **Further resources in the group**
 + cat_bot_domain/sounds/groups/\<group_list_name\> (list of all cat sounds in given group)
 + cat_bot_domain/sounds/groups/\<group_list_name\>/random (one random cat sound from the group)
-+ cat_bot_domain/sounds/groups/\<group_list_name\>/2 (cat sound of id 2 from the group)
 
 ### JSON structures of responses
 
@@ -53,8 +50,8 @@ Status codes:
     + 405 METHOD NOT ALLOWED (Requires returned json to include list of possible operations)
 
 **Only one sound**
-Random or specific id.
-+ cat_bot_domain/sounds/1 or cat_bot_domain/sounds/random
+Random.
++ cat_bot_domain/sounds/random
 
 ```yaml
 Content-Type: "application/json"
@@ -64,8 +61,6 @@ Content-Type: "application/json"
     "SoundLicence": "c0",
     "SoundGroup": "happy",
     "links" : { # HATEOAS
-        "self" : "cat_bot_domain/sounds/1",
-        "selfInGroup" : "cat_bot_domain/sounds/groups/happy/1"
     }
 }
 ```
@@ -118,7 +113,6 @@ CatSounds/
 │   ├── routes/
 │   │   └── routes.js
 │   │       sounds
-│   │       sounds/<id>
 │   │       sounds/random
 │   │       sounds/groups
 │   │       sounds/groups/<group_list_name>
