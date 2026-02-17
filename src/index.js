@@ -94,7 +94,7 @@ export default {
 					SoundGroup: item.SoundGroup,
 						_links: [
 							{
-								rel: "soundsByGroup",
+								rel: "self",
 								href: `/api/sounds/groups/${encodeURIComponent(item.SoundGroup)}`
 							},
 							{
@@ -116,7 +116,9 @@ export default {
 				// If found, return all
 				if (results.length > 0 ) {
 					// HATEOAS links to the results
-					const result = HATEOASlinksToOneExact(results[0]);
+					const result = results.map(item => (
+						HATEOASlinksToOneExact(item)
+					));
 					return Response.json(result);
 				} else {
 					// If group not found, return 404
