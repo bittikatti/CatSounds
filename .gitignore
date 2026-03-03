@@ -20,5 +20,3 @@
 # Test files
 !test/
 !test/**
-!*.py
-*.pyc
