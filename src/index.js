@@ -23,6 +23,19 @@ export default {
 			});
 		}
 
+		// Get session id
+		const cookies = request.headers.get('Cookie') || '';
+		const match = cookies.match(/session_id=([^;]+)/);
+		var sessionId = match ? match[1] : null;
+		if (
+			request.method === "GET" &&
+			pathname !== "/api/session_id" &&
+			!sessionId
+		) {
+			// Exception: Session id does not exists, but client is not requesting it
+			return new Response("First request and set to cookies a session id via GET /api/session_id", { status: 400 });
+		}
+
 		// Only GET method allowed
 		if ( request.method !== "GET" ) {
 			return new Response(
@@ -32,7 +45,23 @@ export default {
 				});
 		}
 		try {
-			// 1. CDN route (cached)
+			// Request session token
+			// NOTE: Is it GET though?
+			if (pathname === "/api/session_id") {
+				if (sessionId) {
+					// Session id has already been set.
+					return new Response("Session id has already been set.", { status: 400 });
+				}
+				sessionId = crypto.randomUUID();
+				// Set the cookie
+				return new Response('Set session', {
+					headers: {
+						'Set-Cookie': `session_id=${sessionId}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=86400`,
+					},
+				});
+			}
+
+			// CDN route (cached)
 			if (pathname.startsWith("/cdn/")) {
 				// Cache mp3 files to /cdn/<soundFileName path
 				const key = pathname.replace("/cdn/", "");
