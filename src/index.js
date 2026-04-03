@@ -13,7 +13,7 @@ export default {
         const {pathname} = new URL(request.url);
 
 		// Enforce edge rate limit
-		const { success } = await env.cat_sounds_edge_rate_limit.limit({ key: pathname }) // key can be any string of your choosing
+		const { success } = await env.cat_sounds_edge_rate_limit.limit({ key: "edge" }) // key can be any string of your choosing
 		if (!success) {
 			// Cloudflare .limit() returns only boolean at run time. So the limit numbers in error message are not dynamic.
 			return new Response(
