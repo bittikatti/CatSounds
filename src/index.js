@@ -33,6 +33,8 @@ function unsuccessfullResponse(status, message, headers = {}) {
 
 export default {
     async fetch(request, env) {
+
+		// env.local_mode do not check, where the request comes from.
         const {pathname} = new URL(request.url);
 
 		// Enforce edge rate limit
