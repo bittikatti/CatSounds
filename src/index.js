@@ -36,6 +36,18 @@ export default {
 			return new Response("First request and set to cookies a session id via GET /api/session_id", { status: 400 });
 		}
 
+		// Rate limit per session id
+		if (sessionId) {
+			const { success } = await env.cat_sounds_session_rate_limit.limit({ key: sessionId })
+			if (!success) {
+				return new Response(
+				JSON.stringify({ error: "Rate limit per session is 10 requests per 60 seconds" }), {
+					status: 429,
+					headers: { "Content-Type": "application/json" }
+				});
+			}
+		}
+
 		// Only GET method allowed
 		if ( request.method !== "GET" ) {
 			return new Response(
