@@ -13,6 +13,7 @@ Like ChatBot but CatBot at first glance.
 * Data in Cloudflare D1
 
 ## Rate limiting
-The calls to the api are rate limited to 10 requests per 60 seconds.
 
-Currently per cloudflare edge location (multiple clients)
+Scope | Requests per 60 s | Notes |
+--- | --- | --- |
+Clouflare edge location | 10 | It is a bit low at the moment |

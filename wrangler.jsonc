@@ -14,7 +14,7 @@
 	*/
 	"ratelimits": [
 		{
-			"name": "cat_sounds_api_rate_limit",
+			"name": "cat_sounds_edge_rate_limit",
 			"namespace_id": "1",
 			"simple": {
 				"limit": 10,
