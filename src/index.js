@@ -8,6 +8,29 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+function successfullResponse(data, headers = {}) {
+	return Response.json(
+		{ success: true, data: data},
+		{
+			status: 200,
+			headers,
+		}
+	)
+}
+
+function unsuccessfullResponse(status, message, headers = {}) {
+	return Response.json(
+		{
+			success: false,
+			error: { message }
+		},
+		{
+			status,
+			headers,
+		}
+	)
+}
+
 export default {
     async fetch(request, env) {
         const {pathname} = new URL(request.url);
@@ -16,11 +39,7 @@ export default {
 		const { success } = await env.cat_sounds_edge_rate_limit.limit({ key: "edge" }) // key can be any string of your choosing
 		if (!success) {
 			// Cloudflare .limit() returns only boolean at run time. So the limit numbers in error message are not dynamic.
-			return new Response(
-			JSON.stringify({ error: "Rate limit for your region is 100 requests per 60 seconds" }), {
-				status: 429,
-				headers: { "Content-Type": "application/json" }
-			});
+			return new unsuccessfullResponse(429,"Rate limit for your region is 100 requests per 60 seconds");
 		}
 
 		// Get session id
@@ -33,28 +52,20 @@ export default {
 			!sessionId
 		) {
 			// Exception: Session id does not exists, but client is not requesting it
-			return new Response("First request and set to cookies a session id via GET /api/session_id", { status: 400 });
+			return new unsuccessfullResponse(400,"First request and set to cookies a session id via GET /api/session_id");
 		}
 
 		// Rate limit per session id
 		if (sessionId) {
 			const { success } = await env.cat_sounds_session_rate_limit.limit({ key: sessionId })
 			if (!success) {
-				return new Response(
-				JSON.stringify({ error: "Rate limit per session is 10 requests per 60 seconds" }), {
-					status: 429,
-					headers: { "Content-Type": "application/json" }
-				});
+				return new unsuccessfullResponse(429, "Rate limit per session is 10 requests per 60 seconds");
 			}
 		}
 
 		// Only GET method allowed
 		if ( request.method !== "GET" ) {
-			return new Response(
-				JSON.stringify({ error: "Method not supported. Only GET is supported." }), {
-					status: 405,
-					headers: { "Allow": "GET", "Content-Type": "application/json" }
-				});
+			return new unsuccessfullResponse(405, "Method not supported. Only GET is supported.", {"Allow": "GET"});
 		}
 		try {
 			// Request session token
@@ -62,15 +73,11 @@ export default {
 			if (pathname === "/api/session_id") {
 				if (sessionId) {
 					// Session id has already been set.
-					return new Response("Session id has already been set.", { status: 400 });
+					return new unsuccessfullResponse(400, "Session id has already been set.");
 				}
 				sessionId = crypto.randomUUID();
 				// Set the cookie
-				return new Response('Set session', {
-					headers: {
-						'Set-Cookie': `session_id=${sessionId}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=86400`,
-					},
-				});
+				return new successfullResponse("Set session", {'Set-Cookie': `session_id=${sessionId}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=86400`});
 			}
 
 			// CDN route (cached)
@@ -81,13 +88,14 @@ export default {
 				const object = await env.sound_files.get(key);
 
 				if (!object) {
-					return new Response("Not found", { status: 404 });
+					return new unsuccessfullResponse(404, "Not found");
 				}
-
+				// object.body is binary file. Do not wrap in json
 				return new Response(object.body, {
+					status: 200,
 					headers: {
-					"Content-Type": object.httpMetadata?.contentType || "audio/mpeg",
-					"Cache-Control": "public, max-age=31536000, immutable"
+						"Content-Type": object.httpMetadata?.contentType || "audio/mpeg",
+						"Cache-Control": "public, max-age=31536000, immutable"
 					}
 				});
 			}
@@ -102,7 +110,7 @@ export default {
 						groups: "/api/sounds/groups",
 					}
 				};
-				return Response.json(result);
+				return new successfullResponse(result);
 			}
 
 			if (pathname === "/api/sounds/random") {
@@ -111,7 +119,7 @@ export default {
 					.prepare("SELECT * FROM CatSounds ORDER BY RANDOM() LIMIT 1")
 					.run();
 				const item = results[0];
-				return Response.json({
+				return new successfullResponse({
 					...item,
 					SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
 					_links: {
@@ -141,7 +149,7 @@ export default {
 							}))
 					}
 				}
-				return Response.json(result);
+				return new successfullResponse(result);
 			}
 
 			// /api/sounds/groups/<group (e.g. happy)>
@@ -154,7 +162,7 @@ export default {
 				// If found, return all
 				if (results.length > 0 ) {
 					// HATEOAS links
-					return Response.json({
+					return successfullResponse({
 						_links: {
 							self: pathname,
 							randomItemFromAll: `${pathname}/random`,
@@ -162,11 +170,7 @@ export default {
 					});
 				} else {
 					// If group not found, return 404
-					return new Response(
-						JSON.stringify({ error: "Not found" }), {
-							status: 404,
-							headers: { "Content-Type": "application/json" }
-						});
+					return new unsuccessfullResponse(404, "Not found");
 				}
 			}
 
@@ -181,7 +185,7 @@ export default {
 				// If found, return all
 				if (results.length > 0 ) {
 					const item = results[0];
-					return Response.json({
+					return successfullResponse({
 						...item,
 						SoundLink: `/cdn/${encodeURIComponent(item.SoundFileName)}`,
 						_links: {
@@ -191,18 +195,11 @@ export default {
 					});
 				} else {
 					// If group not found, return 404
-					return new Response(
-						JSON.stringify({ error: "Not found" }), {
-							status: 404,
-							headers: { "Content-Type": "application/json" }
-						});
+					return new unsuccessfullResponse(404, "Not found");
 				}
 			}
 		} catch (err) {
-			return new Response(
-				JSON.stringify({ error: "Internal error:" + err }),
-				{ status: 500, headers: { "Content-Type": "application/json" } }
-			);
+			return new unsuccessfullResponse(500, "Internal error");
 		}
 		
 
