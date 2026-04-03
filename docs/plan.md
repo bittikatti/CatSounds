@@ -10,6 +10,17 @@
     * Include permanent disclaimer to credit if Freesound is used: "This app uses sounds from Freesound.org."
     * TODO: How to gracefully credit each author of each sound? And keep the web app and the credits accessible? Should the full list be in some other page and that list be linked?
 
+### Use case
+1. User opens the chatbot in web app
+2. If user does not have session id, request one (for rate limiting)
+3. User "sends" message
+4. Cat responds.
+Repeat 3 and 4 with some wait to stay below the rate limit.
+
+**Rate limit:**
+* If edge rate limit is hit, show error message.
+* If session rate limit is hit, wait and disable the client inputs during the wait.
+
 ## CatSounds REST API
 + Possible operations: GET
 + Keep it simple.
