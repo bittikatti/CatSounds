@@ -47,6 +47,10 @@ import seedSQL from './database/seed.sql?raw';
 import { env } from 'cloudflare:test';
 import { beforeAll } from 'vitest';
 
+env.cat_sounds_edge_rate_limit = {
+  limit: async () => ({ success: true }),
+};
+
 beforeAll(async () => {
     for (var stmt of splitSchemaSQL(schemaSQL)) {
         await env.cat_sounds_data.exec(stmt);
