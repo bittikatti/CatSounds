@@ -17,7 +17,7 @@ export default {
 		if (!success) {
 			// Cloudflare .limit() returns only boolean at run time. So the limit numbers in error message are not dynamic.
 			return new Response(
-			JSON.stringify({ error: "Rate limit is 10 requests per 60 seconds" }), {
+			JSON.stringify({ error: "Rate limit for your region is 100 requests per 60 seconds" }), {
 				status: 429,
 				headers: { "Content-Type": "application/json" }
 			});

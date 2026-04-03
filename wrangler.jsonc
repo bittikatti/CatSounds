@@ -17,7 +17,7 @@
 			"name": "cat_sounds_edge_rate_limit",
 			"namespace_id": "1",
 			"simple": {
-				"limit": 10,
+				"limit": 100,
 				"period": 60
 			}
 		}

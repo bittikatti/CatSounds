@@ -16,4 +16,4 @@ Like ChatBot but CatBot at first glance.
 
 Scope | Requests per 60 s | Notes |
 --- | --- | --- |
-Clouflare edge location | 10 | It is a bit low at the moment |
+Clouflare edge location | 100 |  |
