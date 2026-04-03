@@ -12,6 +12,18 @@ export default {
     async fetch(request, env) {
         const {pathname} = new URL(request.url);
 
+		// Enforce rate limit
+		const { success } = await env.cat_sounds_api_rate_limit.limit({ key: pathname }) // key can be any string of your choosing
+		//const { success, limit, period } = res;
+		if (!success) {
+			// Cloudflare .limit() returns only boolean at run time. So the limit numbers in error message are not dynamic.
+			return new Response(
+			JSON.stringify({ error: "Rate limit is 10 requests per 60 seconds" }), {
+				status: 429,
+				headers: { "Content-Type": "application/json" }
+			});
+		}
+
 		// Only GET method allowed
 		if ( request.method !== "GET" ) {
 			return new Response(

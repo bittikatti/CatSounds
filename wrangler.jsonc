@@ -10,6 +10,18 @@
 	"observability": {
 		"enabled": true
 	},
+	/** https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/
+	*/
+	"ratelimits": [
+		{
+			"name": "cat_sounds_api_rate_limit",
+			"namespace_id": "1",
+			"simple": {
+				"limit": 10,
+				"period": 60
+			}
+		}
+	],
 	"d1_databases": [
 		{
 			"binding": "cat_sounds_data",
