@@ -51,6 +51,10 @@ env.cat_sounds_edge_rate_limit = {
   limit: async () => ({ success: true }),
 };
 
+env.cat_sounds_session_rate_limit = {
+  limit: async () => ({ success: true }),
+};
+
 beforeAll(async () => {
     for (var stmt of splitSchemaSQL(schemaSQL)) {
         await env.cat_sounds_data.exec(stmt);
