@@ -206,10 +206,6 @@ export default {
 		
 
 		// Default message if any other path
-        return new Response(
-			JSON.stringify({ error: "Not found" }), {
-				status: 404,
-				headers: { "Content-Type": "application/json" }
-			});
+		return new unsuccessfullResponse(404, "Not found");
     },
 };
