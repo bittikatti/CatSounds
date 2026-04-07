@@ -207,5 +207,5 @@ export default {
 
 		// Default message if any other path
 		return new unsuccessfullResponse(404, "Not found");
-    },
+    }
 };
