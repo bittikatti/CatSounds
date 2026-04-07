@@ -6,13 +6,6 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "catsounds",
 	"main": "src/index.js",
-	"env":{
-		"dev": {
-			"vars": {
-				"local_mode": true
-			}
-		}
-	},
 	"compatibility_date": "2025-12-13",
 	"observability": {
 		"enabled": true

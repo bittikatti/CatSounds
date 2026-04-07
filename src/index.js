@@ -38,7 +38,7 @@ export default {
         const {pathname} = new URL(request.url);
 
 		// Enforce edge rate limit
-		const { success } = await env.cat_sounds_edge_rate_limit.limit({ key: "edge" }) // key can be any string of your choosing
+		const { success } = await env.cat_sounds_edge_rate_limit.limit({ key: "edge" })
 		if (!success) {
 			// Cloudflare .limit() returns only boolean at run time. So the limit numbers in error message are not dynamic.
 			return new unsuccessfullResponse(429,"Rate limit for your region is 100 requests per 60 seconds");
