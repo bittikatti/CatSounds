@@ -75,7 +75,7 @@ export default {
 			if (pathname === "/api/session_id") {
 				if (sessionId) {
 					// Session id has already been set.
-					return new unsuccessfullResponse(400, "Session id has already been set.");
+					return new successfullResponse("Session already set");
 				}
 				sessionId = crypto.randomUUID();
 				// Set the cookie
