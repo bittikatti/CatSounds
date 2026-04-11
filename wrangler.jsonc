@@ -1,0 +1,47 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "catsounds",
+	"main": "src/index.js",
+	"compatibility_date": "2025-12-13",
+	"observability": {
+		"enabled": true
+	},
+	/** https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/
+	*/
+	"ratelimits": [
+		{
+			"name": "cat_sounds_edge_rate_limit",
+			"namespace_id": "1",
+			"simple": {
+				"limit": 200,
+				"period": 60
+			}
+		},
+		{
+			"name": "cat_sounds_session_rate_limit",
+			"namespace_id": "2",
+			"simple": {
+				/** Each request is called twice if also the cdn route is called */
+				"limit": 20,
+				"period": 60
+			}
+		}
+	],
+	"d1_databases": [
+		{
+			"binding": "cat_sounds_data",
+			"database_name": "cat-sounds-data",
+			"database_id": "8c597cd0-7d42-4f7c-a471-3bf437943d25"
+		}
+	],
+	"r2_buckets": [
+		{
+			"bucket_name": "sound-files",
+			"binding": "sound_files"
+		}
+	]
+}

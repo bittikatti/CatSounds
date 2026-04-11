@@ -1,13 +1,27 @@
 # Overview
 
 # Draft
-[] CatBot REST API
+[X] CatSounds REST API
+[ ] Host API and restrict access to web app only
 
-[] Cat responses as audio and text
+[ ] Cat responses as audio and text
 
-[] Example HTML site to display CatBot in action
+[ ] Example HTML site to display CatSounds in action
+    * Include permanent disclaimer to credit if Freesound is used: "This app uses sounds from Freesound.org."
+    * TODO: How to gracefully credit each author of each sound? And keep the web app and the credits accessible? Should the full list be in some other page and that list be linked?
 
-## CatBot REST API
+### Use case
+1. User opens the chatbot in web app
+2. If user does not have session id, request one (for rate limiting)
+3. User "sends" message
+4. Cat responds.
+Repeat 3 and 4 with some wait to stay below the rate limit.
+
+**Rate limit:**
+* If edge rate limit is hit, show error message.
+* If session rate limit is hit, wait and disable the client inputs during the wait.
+
+## CatSounds REST API
 + Possible operations: GET
 + Keep it simple.
     + No queries
@@ -24,8 +38,6 @@
 
 **Basic**
 + cat_bot_domain/documentation (Is this a good way to give the API's documentation?)
-+ cat_bot_domain/sounds (list of all available cat sounds)
-+ cat_bot_domain/sounds/1 (cat sound of id 1)
 + cat_bot_domain/sounds/random (one random cat sound from all available cat sounds)
 + cat_bot_domain/sounds/groups (list of available groups)
     + no random for this resource level (there will be random from all and random from a group, so why random from group**s**?).
@@ -39,7 +51,6 @@
 **Further resources in the group**
 + cat_bot_domain/sounds/groups/\<group_list_name\> (list of all cat sounds in given group)
 + cat_bot_domain/sounds/groups/\<group_list_name\>/random (one random cat sound from the group)
-+ cat_bot_domain/sounds/groups/\<group_list_name\>/2 (cat sound of id 2 from the group)
 
 ### JSON structures of responses
 
@@ -50,18 +61,17 @@ Status codes:
     + 405 METHOD NOT ALLOWED (Requires returned json to include list of possible operations)
 
 **Only one sound**
-Random or specific id.
-+ cat_bot_domain/sounds/1 or cat_bot_domain/sounds/random
+Random.
++ cat_bot_domain/sounds/random
 
 ```yaml
+Content-Type: "application/json"
 {
-    "transcript": "Cat meowing",
-    "soundFile": "Sound file",
-    "license": "In case it really is necessary to include in the free sounds",
-    "group": "happy",
+    "Transcript": "Cat meowing",
+    "SoundFileName": <Link to the sound file>,
+    "SoundLicence": "c0",
+    "SoundGroup": "happy",
     "links" : { # HATEOAS
-        "self" : "cat_bot_domain/sounds/1",
-        "selfInGroup" : "cat_bot_domain/sounds/groups/happy/1"
     }
 }
 ```
@@ -73,6 +83,7 @@ Random or specific id.
 + cat_bot_domain/sounds
 
 ```yaml
+Content-Type: "application/json"
 {
     "list": [],
     "links" : { # HATEOAS
@@ -84,6 +95,7 @@ Random or specific id.
 ```
 + cat_bot_domain/sounds/groups/\<group_list_name\>
 ```yaml
+Content-Type: "application/json"
 {
     "list": [],
     "links" : { # HATEOAS
@@ -93,9 +105,53 @@ Random or specific id.
 }
 ```
 
-
 **List all in group**
 + cat_bot_domain/sounds/groups
+
+### File structure
+
+```text
+CatSounds/
+├── .gitignore
+├── README.md
+├── package.json
+├── src/
+│   ├── index.js
+│   ├── controllers/
+│   │   └── controller.js
+│   │       GET for all routes
+│   │       links to responses
+│   ├── routes/
+│   │   └── routes.js
+│   │       sounds
+│   │       sounds/random
+│   │       sounds/groups
+│   │       sounds/groups/<group_list_name>
+│   │       sounds/groups/<group_list_name>/random
+│   │       
+│   ├── utils/
+│   │   └── <logging?>
+│   └── database/
+│       └── <basically simple table to combine each sound transcription to its sound url>
+├── test/
+│   ├── unit_tests.js
+│   ├── local_end_to_end_tests.js
+│   └── cloudflare_end_to_end_tests.js
+```
+
+### Architecture
+Store sound files in CloudFlare R2. Distribute via CloudFlare CDN.
+* Use Cloudflare caching
+
+Other data in CloudFlare D1. (autoincrementid in case database grows in the future)
+
+REST API with CloudFlare workers
+
+Rate limit
+
+Random:
+* Random from group or all
+* If consecutive same responses bother, consider excluding previous response from next random pool.
 
 ## Legal specs
 Intent is to allow others to use this code freely.
@@ -106,4 +162,4 @@ Use (cat) sounds that are not copyrighted.
 Record own cats.
 Distribute the cat records as open.
 
-Intent to maybe create openly available API?
+Intent to maybe create openly available API? No.
