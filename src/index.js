@@ -84,15 +84,18 @@ export default {
 
 			// CDN route (cached)
 			if (pathname.startsWith("/cdn/")) {
-				// Cache mp3 files to /cdn/<soundFileName path
+				// path should be in the form: /cdn/<File name in R2>
 				const key = pathname.replace("/cdn/", "");
+				if (!key) {
+					return new unsuccessfullResponse(400, "Missing R2 file name");
+				}
 
+				// Get the file and send it.
 				const object = await env.sound_files.get(key);
 
 				if (!object) {
 					return new unsuccessfullResponse(404, "Not found");
 				}
-				// object.body is binary file. Do not wrap in json
 				return new Response(object.body, {
 					status: 200,
 					headers: {
