@@ -149,6 +149,10 @@ REST API with CloudFlare workers
 
 Rate limit
 
+Random:
+* Random from group or all
+* If consecutive same responses bother, consider excluding previous response from next random pool.
+
 ## Legal specs
 Intent is to allow others to use this code freely.
  -> MIT license?
