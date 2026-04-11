@@ -16,5 +16,5 @@ Like ChatBot but CatBot at first glance.
 
 Scope | Requests per 60 s | Notes |
 --- | --- | --- |
-Clouflare edge location | 100 |  |
-Session | 10 | Per client session |
+Clouflare edge location | 200 |  |
+Session | 20 | Per client session |

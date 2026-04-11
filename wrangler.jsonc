@@ -17,7 +17,7 @@
 			"name": "cat_sounds_edge_rate_limit",
 			"namespace_id": "1",
 			"simple": {
-				"limit": 100,
+				"limit": 200,
 				"period": 60
 			}
 		},
@@ -25,7 +25,8 @@
 			"name": "cat_sounds_session_rate_limit",
 			"namespace_id": "2",
 			"simple": {
-				"limit": 10,
+				/** Each request is called twice if also the cdn route is called */
+				"limit": 20,
 				"period": 60
 			}
 		}

@@ -41,7 +41,7 @@ export default {
 		const { success } = await env.cat_sounds_edge_rate_limit.limit({ key: "edge" })
 		if (!success) {
 			// Cloudflare .limit() returns only boolean at run time. So the limit numbers in error message are not dynamic.
-			return new unsuccessfullResponse(429,"Rate limit for your region is 100 requests per 60 seconds");
+			return new unsuccessfullResponse(429,"Rate limit for your region is 200 requests per 60 seconds");
 		}
 
 		// Get session id
@@ -61,7 +61,7 @@ export default {
 		if (sessionId) {
 			const { success } = await env.cat_sounds_session_rate_limit.limit({ key: sessionId })
 			if (!success) {
-				return new unsuccessfullResponse(429, "Rate limit per session is 10 requests per 60 seconds");
+				return new unsuccessfullResponse(429, "Rate limit per session is 20 any requests per 60 seconds");
 			}
 		}
 
