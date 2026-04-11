@@ -90,9 +90,14 @@ export default {
 					return new unsuccessfullResponse(400, "Missing R2 file name");
 				}
 
+				// Cache the request url in Cloudflare
+				const cache = caches.default;
+				const cacheKey = new Request(url.toString(), request);
+				let response = await cache.match(cacheKey);
+				if (response) return response;
+
 				// Get the file and send it.
 				const object = await env.sound_files.get(key);
-
 				if (!object) {
 					return new unsuccessfullResponse(404, "Not found");
 				}
@@ -100,7 +105,7 @@ export default {
 					status: 200,
 					headers: {
 						"Content-Type": object.httpMetadata?.contentType || "audio/mpeg",
-						"Cache-Control": "public, max-age=31536000, immutable"
+						"Cache-Control": "public, max-age=300, immutable" // year = 31536000, 300 = 5 min
 					}
 				});
 			}
