@@ -107,7 +107,7 @@ export default {
 					status: 200,
 					headers: {
 						"Content-Type": object.httpMetadata?.contentType || "audio/mpeg",
-						"Cache-Control": "public, max-age=300, immutable" // year = 31536000, 300 = 5 min
+						"Cache-Control": "public, max-age=2592000, immutable" // cache for 1 month
 					}
 				});
 				ctx.waitUntil(cache.put(cacheKey, response.clone()));
