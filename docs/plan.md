@@ -141,6 +141,7 @@ CatSounds/
 
 ### Architecture
 Store sound files in CloudFlare R2. Distribute via CloudFlare CDN.
+* Use Cloudflare caching
 
 Other data in CloudFlare D1. (autoincrementid in case database grows in the future)
 

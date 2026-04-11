@@ -32,7 +32,7 @@ function unsuccessfullResponse(status, message, headers = {}) {
 }
 
 export default {
-    async fetch(request, env) {
+    async fetch(request, env, ctx) {
 
 		// env.local_mode do not check, where the request comes from.
         const {pathname} = new URL(request.url);
@@ -90,24 +90,28 @@ export default {
 					return new unsuccessfullResponse(400, "Missing R2 file name");
 				}
 
-				// Cache the request url in Cloudflare
+				// Check if the url already in cache.
 				const cache = caches.default;
-				const cacheKey = new Request(url.toString(), request);
+				const cacheKey = new Request(request.url, request);
 				let response = await cache.match(cacheKey);
 				if (response) return response;
 
-				// Get the file and send it.
+				// If response for the request does not exists, create it
+				// Get the file from R2
 				const object = await env.sound_files.get(key);
 				if (!object) {
+					// Error, do not put that in cache
 					return new unsuccessfullResponse(404, "Not found");
 				}
-				return new Response(object.body, {
+				response = new Response(object.body, {
 					status: 200,
 					headers: {
 						"Content-Type": object.httpMetadata?.contentType || "audio/mpeg",
 						"Cache-Control": "public, max-age=300, immutable" // year = 31536000, 300 = 5 min
 					}
 				});
+				ctx.waitUntil(cache.put(cacheKey, response.clone()));
+				return response;
 			}
 
 			// From the database
