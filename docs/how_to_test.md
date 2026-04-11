@@ -31,10 +31,18 @@ npx wrangler d1 execute cat-sounds-data --local --command="SELECT * FROM CatSoun
 ```
 
 ## Setup D1 remote
-2. Initiate empty database in D1 locally
+2. (If the remote D1 does not exist) Initiate empty database in D1 remotely
 ```cmd
 npx wrangler d1 execute cat-sounds-data --remote --file=./database/schema.sql
 ```
+
+2. (Optional: Remove existing D1 rows) If the remote D1 exists, but you wish to update some data, you may remove all rows first and restart the autoincrement id
+```cmd
+npx wrangler d1 execute cat-sounds-data --remote --command="DELETE FROM CatSounds;"
+
+npx wrangler d1 execute cat-sounds-data --remote --command="DELETE FROM sqlite_sequence WHERE name='CatSounds';"
+```
+
 3. Fill the local D1 database with data from seed.sql (not tracked by git)
 ```cmd
 npx wrangler d1 execute cat-sounds-data --remote --file=./database/seed.sql

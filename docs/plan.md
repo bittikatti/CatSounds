@@ -142,7 +142,7 @@ CatSounds/
 ### Architecture
 Store sound files in CloudFlare R2. Distribute via CloudFlare CDN.
 
-Other data in CloudFlare KV or D1.
+Other data in CloudFlare D1. (autoincrementid in case database grows in the future)
 
 REST API with CloudFlare workers
 
